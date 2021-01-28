@@ -15,8 +15,11 @@ RUN apt-get update \
         	libonig-dev \
 		libmemcached-dev \
 		zlib1g-dev && pecl install memcached && docker-php-ext-enable memcached
-		
-RUN docker-php-ext-install mysqli
+
+RUN apt install -y libmagickwand-dev --no-install-recommends && \
+    pecl install imagick && docker-php-ext-enable imagick && \
+    rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install mysqli bcmath mbstring opcache
 
 RUN rm -rf /var/lib/apt/lists/*
 
