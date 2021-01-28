@@ -28,6 +28,10 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install iconv intl pdo_mysql mbstring soap gd zip
 RUN a2enmod rewrite
 
+COPY php.ini /usr/local/etc/php/php.ini
+
+# Use the default production configuration
+#RUN mv "$PHP_INI_DIR/php.ini" "$PHP_INI_DIR/php.ini"
 
 RUN docker-php-source extract \
   && if [ -d "/usr/src/php/ext/mysql" ]; then docker-php-ext-install mysql; fi \
