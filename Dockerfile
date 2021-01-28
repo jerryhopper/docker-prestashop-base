@@ -16,6 +16,7 @@ RUN apt-get update \
 		libmemcached-dev \
 		zlib1g-dev && pecl install memcached && docker-php-ext-enable memcached
 		
+RUN docker-php-ext-install mysqli
 
 RUN rm -rf /var/lib/apt/lists/*
 
