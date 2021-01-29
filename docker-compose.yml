@@ -11,12 +11,12 @@ services:
         depends_on:
             - php
         volumes:
-            - .:/app/:cached
+            - .:/app:cached
     php:
         image: jerryhopper/phpfpm:latest
         restart: always
         volumes:
-            - .:/app/:cached
+            - .:/app:cached
         environment:
             - "PHP_SESSION_SAVE_HANDLER=redis"
             - "PHP_SESSION_SAVE_PATH=tcp://redis:6379"
