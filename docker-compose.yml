@@ -12,6 +12,8 @@ services:
             - php
         volumes:
             - ./app:/app:cached
+        ports:
+            - 8089:8080
     php:
         image: jerryhopper/phpfpm:latest
         restart: always
