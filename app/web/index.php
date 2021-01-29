@@ -1,5 +1,9 @@
 <?php
 
+phpinfo();
+print_r($_SERVER);
+exit();
+
 class PhpPsInfo
 {
     protected $login;
