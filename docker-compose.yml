@@ -6,9 +6,5 @@ services:
         environment:
             - "VIRTUAL_HOST=my.domain.ext"
             - "APACHE_DOCUMENTROOT=/app/web"
-        links:
-            - php
-        depends_on:
-            - php
         volumes:
             - .:/app:cached
