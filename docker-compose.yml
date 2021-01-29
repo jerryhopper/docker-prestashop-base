@@ -7,4 +7,4 @@ services:
             - "VIRTUAL_HOST=my.domain.ext"
             - "APACHE_DOCUMENTROOT=/app/web"
         volumes:
-            - .:/app:cached
+            - ./app:/app:cached
