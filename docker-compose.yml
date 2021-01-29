@@ -1,0 +1,21 @@
+version: '3'
+services:
+    web:
+        image: docker-apache-fpm:latest
+        restart: always
+        network_mode: "bridge"
+        environment:
+            - "VIRTUAL_HOST=my.domain.ext"
+            - "APACHE_DOCUMENTROOT=/app/web"
+        links:
+            - php
+        depends_on:
+            - php
+        volumes:
+            - .:/app/:delegated
+    php:
+        image: php:7.3-fpm
+        restart: always
+        network_mode: "bridge"
+        volumes:
+            - .:/app/:delegated
