@@ -1,5 +1,5 @@
 name: ci
-on: [push]
+on: [pushx]
 jobs:
   multi:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
           file: ./Dockerfile
           build-args: DPB_VERSION=${{ env.DPB_VERSION }}
           platforms: linux/amd64
-          push: true
+          push: false
           tags: |
             ${{ secrets.DOCKERHUB_REPO }}:latest
             ${{ secrets.DOCKERHUB_REPO }}:${{ env.DPB_VERSION }}
