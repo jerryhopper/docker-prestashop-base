@@ -22,6 +22,13 @@ services:
         environment:
             - "PHP_SESSION_SAVE_HANDLER=redis"
             - "PHP_SESSION_SAVE_PATH=tcp://redis:6379"
+            - "PHP_MAX_EXECUTION_TIME=120"
+            - "PHP_MEMORY_LIMIT=256M"
+            - "PHP_UPLOAD_LIMIT=8M"
+            - "PHP_OPCACHE_LIMIT=64M"
+            - "PHP_OPCACHE_REVALIDATE=2"
+            - "PHP_SMTP_HOST=localhost"
+            - "PHP_MAX_INPUT_VARS=1000"
         links:
             - redis
         depends_on:
@@ -30,8 +37,8 @@ services:
         image: redis:4-alpine
         restart: always
         network_mode: "bridge"
-    memcache:
-        image: memcache
+    memcached:
+        image: memcached:latest
         restart: always
         network_mode: "bridge"
         
