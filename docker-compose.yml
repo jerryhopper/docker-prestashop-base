@@ -12,10 +12,26 @@ services:
         depends_on:
             - php
         volumes:
-            - .:/app/:delegated
+            - .:/app/:cached
     php:
         image: jerryhopper/phpfpm:latest
         restart: always
         network_mode: "bridge"
         volumes:
-            - .:/app/:delegated
+            - .:/app/:cached
+        environment:
+            - "PHP_SESSION_SAVE_HANDLER=redis"
+            - "PHP_SESSION_SAVE_PATH=tcp://redis:6379"
+        links:
+            - redis
+        depends_on:
+            - redis
+    redis:
+        image: redis:4-alpine
+        restart: always
+        network_mode: "bridge"
+    memcache:
+        image: memcache
+        restart: always
+        network_mode: "bridge"
+        
