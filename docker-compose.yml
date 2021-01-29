@@ -3,7 +3,6 @@ services:
     web:
         image: jerryhopper/apache2-fpm:latest
         restart: always
-        network_mode: "bridge"
         environment:
             - "VIRTUAL_HOST=my.domain.ext"
             - "APACHE_DOCUMENTROOT=/app/web"
@@ -16,7 +15,6 @@ services:
     php:
         image: jerryhopper/phpfpm:latest
         restart: always
-        network_mode: "bridge"
         volumes:
             - .:/app/:cached
         environment:
@@ -36,9 +34,7 @@ services:
     redis:
         image: redis:4-alpine
         restart: always
-        network_mode: "bridge"
     memcached:
         image: memcached:latest
         restart: always
-        network_mode: "bridge"
         
