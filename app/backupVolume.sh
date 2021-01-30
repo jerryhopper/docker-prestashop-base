@@ -10,9 +10,9 @@ if [ "$1" = "" ];then
   exit
 fi
 if [ "$2" = "" ];then
-  echo "Missing 2nd paramater (filename)"
+  echo "Missing 2nd paramater (filename), using volumename"
   FILENAME=$1
-  exit
+  
 fi
 
 if [ ! -d $PWD/backup ];then
