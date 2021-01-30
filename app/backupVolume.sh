@@ -19,6 +19,7 @@ if [ ! -d $PWD/backup ];then
   mkdir ./backup
 fi
 
+docker run --rm -v $VOLUME:/app -v $PWD/backup:/backup ubuntu bash -c "ls -latr /"
 
 # Backup the www directory in a tar
 docker run --rm -v $VOLUME:/app -v $PWD/backup:/backup ubuntu bash -c "cd /app && tar cvf /backup/$FILENAME.tar ." > /dev/null
