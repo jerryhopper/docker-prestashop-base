@@ -16,7 +16,10 @@ fixOwnership(){
   docker exec $CONTAINER bash -c "chown -R www-data:www-data /app"  
 }
 
-
+if [ "$1"="clear" ];then
+  docker exec $CONTAINER bash -c "cd /app/web && rm -rf ./" 
+  exit 0
+fi
 
 if [ "$1"="install" ];then
   docker exec $CONTAINER bash -c "cd /app/web && wget $DOWNLOADFILE && unzip $THEFILE && rm -f $THEFILE && unzip prestashop.zip" 
