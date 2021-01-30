@@ -2,6 +2,7 @@ version: '3'
 services:
     web:
         image: jerryhopper/apache2-fpm:latest
+        container_name: prestashop_web
         restart: always
         environment:
             - "VIRTUAL_HOST=my.domain.ext"
@@ -15,9 +16,12 @@ services:
         ports:
             - 8089:80
     database:
+        container_name: prestashop_database
         image: mariadb:latest
+        restart: always
     php:
         image: jerryhopper/phpfpm:latest
+        container_name: prestashop_php
         restart: always
         volumes:
             - ./app:/app:cached
@@ -34,7 +38,9 @@ services:
             - redis
     redis:
         image: redis:4-alpine
+        container_name: prestashop_redis
         restart: always
     memcached:
         image: memcached:latest
+        container_name: prestashop_memcached
         restart: always
