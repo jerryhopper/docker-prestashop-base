@@ -1,6 +1,9 @@
 version: '3'
 services:
     web:
+        #
+        # Apache webserver prepared for php-fpm
+        #
         image: jerryhopper/apache2-fpm:latest
         container_name: prestashop_web
         restart: always
@@ -16,13 +19,21 @@ services:
         ports:
             - 8089:80
     database:
+        #
+        # MariaDB database
+        #
         container_name: prestashop_database
         image: mariadb:latest
         restart: always
     php:
+        #
+        # php-fpm binary
+        #
         image: jerryhopper/phpfpm:latest
         container_name: prestashop_php
         restart: always
+        depends_on:
+            - redis
         # Scheduler!
         labels:
             ofelia.enabled: "true"
@@ -40,12 +51,19 @@ services:
         links:
             - redis
         depends_on:
-            - redis
+            - database
     redis:
+        # 
+        # Redis for session storage
+        #
         image: redis:4-alpine
         container_name: prestashop_redis
         restart: always
+        depends_on: memcached
     memcached:
+        #
+        # Memchache server 
+        #
         image: memcached:latest
         container_name: prestashop_memcached
         restart: always
