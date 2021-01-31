@@ -12,7 +12,7 @@ services:
         depends_on:
             - php
         volumes:
-            - ./app:/app:cached
+            - prestashop-data:/app:cached
         ports:
             - 8089:80
     database:
@@ -24,7 +24,8 @@ services:
         container_name: prestashop_php
         restart: always
         volumes:
-            - ./app:/app:cached
+        volumes:
+            - prestashop-data:/app:cached
         environment:
             - "PHP_SESSION_SAVE_HANDLER=redis"
             - "PHP_SESSION_SAVE_PATH=tcp://redis:6379"
@@ -44,3 +45,19 @@ services:
         image: memcached:latest
         container_name: prestashop_memcached
         restart: always
+    scheduler:
+        image: mcuadros/ofelia:latest
+        depends_on:
+            - nginx
+        command: daemon --docker
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        labels:
+            ofelia.job-local.my-test-job.schedule: "@every 5s"
+            ofelia.job-local.my-test-job.command: "date"    
+    nginx:
+        image: nginx
+        labels:
+            ofelia.enabled: "true"
+            ofelia.job-exec.datecron.schedule: "@every 5s"
+            ofelia.job-exec.datecron.command: "uname -a"
