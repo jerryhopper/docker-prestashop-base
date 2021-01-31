@@ -59,7 +59,8 @@ services:
         image: redis:4-alpine
         container_name: prestashop_redis
         restart: always
-        depends_on: memcached
+        depends_on: 
+            - memcached
     memcached:
         #
         # Memchache server 
