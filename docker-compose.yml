@@ -81,4 +81,6 @@ services:
         labels:
             ofelia.job-local.my-test-job.schedule: "@every 5s"
             ofelia.job-local.my-test-job.command: "date"    
+volumes:
+  prestashop-data:
 
