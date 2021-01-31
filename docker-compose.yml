@@ -37,7 +37,7 @@ services:
         # Scheduler!
         labels:
             ofelia.enabled: "true"
-            ofelia.job-exec.datecron.schedule: "@every 1h"
+            ofelia.job-exec.datecron.schedule: "@every 60s"
             ofelia.job-exec.datecron.command: "uname -a"
         volumes:
             - prestashop-data:/app:cached
@@ -79,7 +79,7 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
         labels:
-            ofelia.job-local.my-test-job.schedule: "@every 5s"
+            ofelia.job-local.my-test-job.schedule: "@every 65s"
             ofelia.job-local.my-test-job.command: "date"    
 volumes:
   prestashop-data:
