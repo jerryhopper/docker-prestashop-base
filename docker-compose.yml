@@ -33,7 +33,7 @@ services:
         #
         # php-fpm binary
         #
-        image: jerryhopper/phpfpm:latest
+        image: jerryhopper/phpfpm:latest-dev
         container_name: prestashop_php
         restart: always
         depends_on:
