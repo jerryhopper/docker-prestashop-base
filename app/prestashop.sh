@@ -42,7 +42,7 @@ fi
 
 
 if [ "$1" = "install" ];then
-  docker exec $WEBCONTAINER sh -c "cd /app/web && curl $DOWNLOADFILE -o $THEFILE && unzip $THEFILE && rm -f $THEFILE && unzip prestashop.zip" 
+  docker exec $WEBCONTAINER sh -c "cd /app/web && wget $DOWNLOADFILE && unzip $THEFILE && rm -f $THEFILE && unzip prestashop.zip" 
   fixPermissions
   fixOwnership
   exit 0
