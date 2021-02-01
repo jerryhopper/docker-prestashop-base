@@ -31,6 +31,17 @@ fixOwnership(){
   docker exec $WEBCONTAINER sh -c "chown -R www-data:www-data /app"  
 }
 
+
+installPrestashop(){
+  docker exec $WEBCONTAINER sh -c "rm -rf /app/web/* && mkdir -p /app/web/var/cache && cd /app/web && curl $DOWNLOADFILE -o $THEFILE && unzip $THEFILE && rm -f $THEFILE && unzip -o prestashop.zip" 
+  fixPermissions
+  fixOwnership
+}
+
+
+
+
+
 if [ "$1" = "clear" ];then
   docker exec $WEBCONTAINER sh -c "cd /app/web && rm -rf ./" 
   exit 0
@@ -42,9 +53,7 @@ fi
 
 
 if [ "$1" = "install" ];then
-  docker exec $WEBCONTAINER sh -c "rm -rf /app/web/* && mkdir -p /app/web/var/cache && cd /app/web && wget $DOWNLOADFILE && unzip $THEFILE && rm -f $THEFILE && unzip -o prestashop.zip" 
-  fixPermissions
-  fixOwnership
+  installPrestashop
   exit 0
 fi
 
