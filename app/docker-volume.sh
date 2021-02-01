@@ -34,6 +34,7 @@ if [ "$ACTION" = "backup" ];then
     FILENAME=$2
   fi
   backupVolume
+  exit
 fi
 
 if [ "$ACTION" = "restore" ];then
