@@ -54,8 +54,6 @@ services:
         #
         image: mcuadros/ofelia:latest
         container_name: prestashop_scheduler
-        depends_on:
-            - php
         command: daemon --docker
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
