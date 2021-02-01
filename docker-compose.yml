@@ -7,10 +7,6 @@ services:
         image: prestashop/prestashop:1.7.7.1-fpm
         container_name: prestashop_web2
         restart: always
-        links:
-            - php
-        depends_on:
-            - php
         volumes:
             - prestashop-data:/app:cached
         ports:
