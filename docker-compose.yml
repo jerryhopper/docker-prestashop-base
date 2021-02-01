@@ -11,12 +11,12 @@ services:
             - 8085:80
         environment:
             - PS_DEV_MODE=false
-            - PS_HOST_MODE=true
-            - DB_SERVER=database
-            - DB_USER=prestashop
-            - DB_PASSWD=webturd123
-            - DB_NAME=prestashop
-            - PS_LANGUAGE=nl
+            #- PS_HOST_MODE=true
+            #- DB_SERVER=database
+            #- DB_USER=prestashop
+            #- DB_PASSWD=webturd123
+            #- DB_NAME=prestashop
+            #- PS_LANGUAGE=nl
             #- PS_HANDLE_DYNAMIC_DOMAIN=1
         #volumes:
         #    - prestashop-data:/var/www/html
