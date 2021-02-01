@@ -1,0 +1,120 @@
+version: '3'
+services:
+    web2:
+        #
+        #
+        #
+        image: prestashop/prestashop:1.7.7.1-fpm
+        container_name: prestashop_web2
+        restart: always
+        links:
+            - php
+        depends_on:
+            - php
+        volumes:
+            - prestashop-data:/app:cached
+        ports:
+            - 8086:80
+        environment:
+            - PS_DEV_MODE=false
+            - PS_HOST_MODE=true
+            - DB_SERVER=database
+            - DB_USER=prestashop
+            - DB_PASSWD=webturd123
+            - DB_NAME=prestashop
+            - PS_LANGUAGE=nl
+            - PS_LANGUAGE=nl
+        volumes:
+            - prestashop-data:/var/www/html
+    web:
+        #
+        # Apache webserver prepared for php-fpm
+        #
+        image: jerryhopper/apache2-fpm:latest
+        container_name: prestashop_web
+        restart: always
+        environment:
+            - "VIRTUAL_HOST=my.domain.ext"
+            - "APACHE_DOCUMENTROOT=/app/web"
+        links:
+            - php
+        depends_on:
+            - php
+        volumes:
+            - prestashop-data:/app:cached
+        ports:
+            - 8089:80
+    database:
+        #
+        # MariaDB database
+        #
+        container_name: prestashop_database
+        image: mariadb:latest
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - prestashop-database:/var/lib/mysql
+    php:
+        #
+        # php-fpm binary
+        #
+        image: jerryhopper/phpfpm:latest-dev
+        container_name: prestashop_php
+        restart: always
+        depends_on:
+            - redis
+        # Scheduler!
+        labels:
+            ofelia.enabled: "true"
+            # every day at 01:00
+            ofelia.job-exec.datecron.schedule: "0 0 1 * * *"
+            ofelia.job-exec.datecron.command: "uname -a"
+        volumes:
+            - prestashop-data:/app:cached
+        environment:
+            - "PHP_SESSION_SAVE_HANDLER=redis"
+            - "PHP_SESSION_SAVE_PATH=tcp://redis:6379"
+            - "PHP_MAX_EXECUTION_TIME=120"
+            - "PHP_OPCACHE_LIMIT=64M"
+            - "PHP_OPCACHE_REVALIDATE=2"
+            - "PHP_SMTP_HOST=localhost"
+        links:
+            - redis
+            - database
+        depends_on:
+            - database
+    redis:
+        # 
+        # Redis for session storage
+        #
+        image: redis:4-alpine
+        container_name: prestashop_redis
+        restart: always
+        depends_on: 
+            - memcached
+    memcached:
+        #
+        # Memchache server 
+        #
+        image: memcached:latest
+        container_name: prestashop_memcached
+        restart: always
+    scheduler:
+        #
+        # https://github.com/mcuadros/ofelia
+        #
+        image: mcuadros/ofelia:latest
+        container_name: prestashop_scheduler
+        depends_on:
+            - php
+        command: daemon --docker
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        #labels:
+        #    ofelia.job-local.my-test-job.schedule: "@every 65s"
+        #    ofelia.job-local.my-test-job.command: "date"    
+volumes:
+  prestashop-data:
+  prestashop-database:
+
