@@ -23,7 +23,6 @@ services:
             - DB_PASSWD=webturd123
             - DB_NAME=prestashop
             - PS_LANGUAGE=nl
-            - PS_LANGUAGE=nl
         volumes:
             - prestashop-data:/var/www/html
     database:
