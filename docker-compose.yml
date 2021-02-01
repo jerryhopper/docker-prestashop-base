@@ -18,8 +18,8 @@ services:
             - DB_NAME=prestashop
             - PS_LANGUAGE=nl
             - PS_HANDLE_DYNAMIC_DOMAIN=1
-        volumes:
-            - prestashop-data:/var/www/html
+        #volumes:
+        #    - prestashop-data:/var/www/html
     database:
         #
         # MariaDB database
