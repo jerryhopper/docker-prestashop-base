@@ -62,7 +62,10 @@ if [ "$1" = "fixpermissions" ];then
 fi
 
 
-
+if [ "$1" = "show" ];then
+  docker exec $CONTAINER bash -c "ls -latr /app && ls -latr /app/web" 
+  exit 0
+fi
 
 
 
