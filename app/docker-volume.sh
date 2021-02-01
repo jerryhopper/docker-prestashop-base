@@ -39,6 +39,14 @@ fi
 if [ "$ACTION" = "restore" ];then
   if [ "$VOLUME" = "" ];then
     echo "Missing 1st paramater (volume)"
+    retoreVolume
     exit
   fi
 fi
+
+
+echo "Usage:"
+echo "  docker-volume backup"
+echo "  docker-volume restore"
+
+
