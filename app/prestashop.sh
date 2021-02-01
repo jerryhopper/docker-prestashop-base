@@ -4,6 +4,7 @@ THEFILE=prestashop_1.7.7.1.zip
 DOWNLOADFILE=https://download.prestashop.com/download/releases/$THEFILE
 
 CONTAINER=prestashop_php
+WEBCONTAINER=prestashop_web
 DBCONTAINER=prestashop_database
 
 
@@ -22,16 +23,16 @@ enableShop(){
 
 fixPermissions(){
   echo "Fix permissions"
-  docker exec $CONTAINER bash -c "chmod +w ./var/cache && chmod +w ./var/logs && chmod +w ./img && chmod +w ./mails && chmod +w ./modules && chmod +w ./translations && chmod +w ./upload && chmod +w ./download && chmod +w ./app/config && chmod +w ./app/Resources/tramslations"
+  docker exec $WEBCONTAINER bash -c "chmod +w ./var/cache && chmod +w ./var/logs && chmod +w ./img && chmod +w ./mails && chmod +w ./modules && chmod +w ./translations && chmod +w ./upload && chmod +w ./download && chmod +w ./app/config && chmod +w ./app/Resources/tramslations"
 }
 
 fixOwnership(){
   echo "Fix Ownership"
-  docker exec $CONTAINER bash -c "chown -R www-data:www-data /app"  
+  docker exec $WEBCONTAINER bash -c "chown -R www-data:www-data /app"  
 }
 
 if [ "$1" = "clear" ];then
-  docker exec $CONTAINER bash -c "cd /app/web && rm -rf ./" 
+  docker exec $WEBCONTAINER bash -c "cd /app/web && rm -rf ./" 
   exit 0
 fi
 
@@ -41,7 +42,7 @@ fi
 
 
 if [ "$1" = "install" ];then
-  docker exec $CONTAINER bash -c "cd /app/web && curl $DOWNLOADFILE -o $THEFILE && unzip $THEFILE && rm -f $THEFILE && unzip prestashop.zip" 
+  docker exec $WEBCONTAINER bash -c "cd /app/web && curl $DOWNLOADFILE -o $THEFILE && unzip $THEFILE && rm -f $THEFILE && unzip prestashop.zip" 
   fixPermissions
   fixOwnership
   exit 0
