@@ -27,6 +27,8 @@ services:
         restart: always
         environment:
             - MYSQL_ROOT_PASSWORD=test123
+        volumes:
+            - prestashop-database:/var/lib/mysql
     php:
         #
         # php-fpm binary
@@ -86,4 +88,5 @@ services:
         #    ofelia.job-local.my-test-job.command: "date"    
 volumes:
   prestashop-data:
+  prestashop-database:
 
