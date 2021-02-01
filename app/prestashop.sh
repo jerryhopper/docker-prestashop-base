@@ -33,7 +33,7 @@ fixOwnership(){
 
 
 installPrestashop(){
-  docker exec $WEBCONTAINER sh -c "rm -rf /app/web/* && mkdir -p /app/web/var/cache && cd /app/web && curl $DOWNLOADFILE -o $THEFILE && unzip $THEFILE && rm -f $THEFILE && unzip -o prestashop.zip" 
+  docker exec $CONTAINER sh -c "rm -rf /app/web/* && mkdir -p /app/web/var/cache && cd /app/web && curl $DOWNLOADFILE -o $THEFILE && unzip $THEFILE && rm -f $THEFILE && unzip -o prestashop.zip" 
   fixPermissions
   fixOwnership
 }
