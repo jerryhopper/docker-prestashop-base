@@ -23,7 +23,7 @@ enableShop(){
 
 fixPermissions(){
   echo "Fix permissions"
-  docker exec $WEBCONTAINER sh -c "chmod +w /app/web/var/cache && chmod +w /app/web/var/logs && chmod +w /app/web/img && chmod +w /app/web/mails && chmod +w /app/web/modules && chmod +w /app/web/translations && chmod +w /app/web/upload && chmod +w /app/web/download && chmod +w /app/web/app/config && chmod +w /app/web/app/Resources/tramslations"
+  docker exec $WEBCONTAINER sh -c "chmod +w /app/web/var/cache && chmod +w /app/web/var/logs && chmod +w /app/web/img && chmod +w /app/web/mails && chmod +w /app/web/modules && chmod +w /app/web/translations && chmod +w /app/web/upload && chmod +w /app/web/download && chmod +w /app/web/app/config && chmod +w /app/web/app/Resources/translations"
 }
 
 fixOwnership(){
