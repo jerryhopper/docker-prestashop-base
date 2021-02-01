@@ -31,7 +31,7 @@ if [ "$ACTION" = "backup" ];then
   fi
   if [ "$FILENAME" = "" ];then
     echo "Missing 2nd paramater (filename), using volumename"
-    FILENAME=$1
+    FILENAME=$2
   fi
   backupVolume
 fi
