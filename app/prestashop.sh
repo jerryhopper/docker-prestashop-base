@@ -33,9 +33,27 @@ fixOwnership(){
 
 
 installPrestashop(){
+  echo "Downloading & extracting prestashop"
   docker exec $CONTAINER sh -c "rm -rf /app/web/* && mkdir -p /app/web/var/cache && cd /app/web && curl $DOWNLOADFILE -o $THEFILE && unzip $THEFILE && rm -f $THEFILE && unzip -o prestashop.zip" 
   fixPermissions
   fixOwnership
+  echo "Create database & user"
+  DBROOTPWD=mypassword12345
+  DBNAME=beststout
+  DBUSER=beststout
+  DBPASS=webturd123
+  
+  echo "Dropping database & user"
+  docker exec -it $DBCONTAINER mysql -uroot -p$DBROOTPWD -e "DROP DATABASE $DBNAME;"
+  docker exec -it $DBCONTAINER mysql -uroot -p$DBROOTPWD -e "DROP USER $DBUSER@'%';"
+
+
+  
+  docker exec -it $DBCONTAINER mysql -uroot -p$DBROOTPWD -e "CREATE DATABASE $DBNAME /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+  docker exec -it $DBCONTAINER mysql -uroot -p$DBROOTPWD -e "CREATE USER $DBUSER@'%' IDENTIFIED BY '$DBPASS';"
+  docker exec -it $DBCONTAINER mysql -uroot -p$DBROOTPWD -e "GRANT ALL PRIVILEGES ON $DBNAME.* TO '$DBUSER'@'%';FLUSH PRIVILEGES;"
+  docker exec -it $DBCONTAINER mysql -uroot -p$DBROOTPWD -e "FLUSH PRIVILEGES;"
+
 }
 
 
