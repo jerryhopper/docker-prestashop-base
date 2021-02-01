@@ -9,7 +9,7 @@ services:
         restart: always
         environment:
             - "VIRTUAL_HOST=my.domain.ext"
-            #- "APACHE_DOCUMENTROOT=/app/web"
+            - "APACHE_DOCUMENTROOT=/app/web"
         links:
             - php
         depends_on:
