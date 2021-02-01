@@ -55,6 +55,7 @@ services:
             - "PHP_SMTP_HOST=localhost"
         links:
             - redis
+            - database
         depends_on:
             - database
     redis:
