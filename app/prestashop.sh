@@ -3,7 +3,7 @@
 THEFILE=prestashop_1.7.7.1.zip
 DOWNLOADFILE=https://download.prestashop.com/download/releases/$THEFILE
 
-CONTAINER=presta_shop
+CONTAINER=presta_web
 DBCONTAINER=presta_database
 
 
@@ -30,7 +30,7 @@ fixOwnership(){
   docker exec $CONTAINER bash -c "chown -R www-data:www-data /app"  
 }
 
-if [ "$1"="clear" ];then
+if [ "$1" = "clear" ];then
   docker exec $CONTAINER bash -c "cd /app/web && rm -rf ./" 
   exit 0
 fi
@@ -40,7 +40,7 @@ fi
 
 
 
-if [ "$1"="install" ];then
+if [ "$1" = "install" ];then
   docker exec $CONTAINER bash -c "cd /app/web && wget $DOWNLOADFILE && unzip $THEFILE && rm -f $THEFILE && unzip prestashop.zip" 
   fixPermissions
   fixOwnership
@@ -48,14 +48,14 @@ if [ "$1"="install" ];then
 fi
 
 
-if [ "$1"="fixowner" ];then
+if [ "$1" = "fixowner" ];then
   # Set ownership
   fixOwnership
   exit 0
 fi
 
 
-if [ "$1"="fixpermissions" ];then
+if [ "$1" = "fixpermissions" ];then
   # Set permissions
   fixPermissions
   exit 0
