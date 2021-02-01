@@ -38,7 +38,7 @@ installPrestashop(){
   fixPermissions
   fixOwnership
   echo "Create database & user"
-  DBROOTPWD=MYSQL_ROOT_PASSWORD
+  DBROOTPWD=$MYSQL_ROOT_PASSWORD
   DBNAME=beststout
   DBUSER=beststout
   DBPASS=webturd123
