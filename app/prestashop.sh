@@ -3,7 +3,7 @@
 THEFILE=prestashop_1.7.7.1.zip
 DOWNLOADFILE=https://download.prestashop.com/download/releases/$THEFILE
 
-CONTAINER=prestashop_web
+CONTAINER=prestashop_php
 DBCONTAINER=prestashop_database
 
 
