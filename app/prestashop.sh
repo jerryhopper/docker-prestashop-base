@@ -39,8 +39,8 @@ installPrestashop(){
   fixOwnership
   
   DBROOTPWD=test123
-  DBNAME=beststout
-  DBUSER=beststout
+  DBNAME=prestashop
+  DBUSER=prestashop
   DBPASS=webturd123
   
   echo "Dropping database & user"
