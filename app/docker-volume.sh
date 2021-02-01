@@ -40,9 +40,10 @@ fi
 if [ "$ACTION" = "restore" ];then
   if [ "$VOLUME" = "" ];then
     echo "Missing 1st paramater (volume)"
-    retoreVolume
     exit
   fi
+  retoreVolume
+  exit 
 fi
 
 
