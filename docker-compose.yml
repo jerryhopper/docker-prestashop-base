@@ -78,6 +78,7 @@ services:
         # https://github.com/mcuadros/ofelia
         #
         image: mcuadros/ofelia:latest
+        container_name: prestashop_scheduler
         depends_on:
             - php
         command: daemon --docker
