@@ -10,7 +10,7 @@ services:
         volumes:
             - prestashop-data:/app:cached
         ports:
-            - 8086:80
+            - 8085:80
         environment:
             - PS_DEV_MODE=false
             - PS_HOST_MODE=true
