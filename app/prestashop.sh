@@ -4,6 +4,20 @@ THEFILE=prestashop_1.7.7.1.zip
 DOWNLOADFILE=https://download.prestashop.com/download/releases/$THEFILE
 
 CONTAINER=presta_beststout_shop
+DBCONTAINER=presta_beststout_database
+
+
+
+disableShop(){
+  echo "Disabling prestashop"
+  docker exec $DBCONTAINER  mysql -u $DBUSER -p$DBPASS  -e "UPDATE ps_configuration SET value=0 WHERE `name` = 'PS_SHOP_ENABLE'"
+}
+
+enableShop(){
+  echo "Enabling prestashop"
+  docker exec $DBCONTAINER  mysql -u $DBUSER -p$DBPASS  -e "UPDATE ps_configuration SET value=1 WHERE `name` = 'PS_SHOP_ENABLE'"
+}
+
 
 
 fixPermissions(){
@@ -20,6 +34,11 @@ if [ "$1"="clear" ];then
   docker exec $CONTAINER bash -c "cd /app/web && rm -rf ./" 
   exit 0
 fi
+
+
+
+
+
 
 if [ "$1"="install" ];then
   docker exec $CONTAINER bash -c "cd /app/web && wget $DOWNLOADFILE && unzip $THEFILE && rm -f $THEFILE && unzip prestashop.zip" 
