@@ -3,8 +3,8 @@
 THEFILE=prestashop_1.7.7.1.zip
 DOWNLOADFILE=https://download.prestashop.com/download/releases/$THEFILE
 
-CONTAINER=presta_beststout_shop
-DBCONTAINER=presta_beststout_database
+CONTAINER=presta_shop
+DBCONTAINER=presta_database
 
 
 
