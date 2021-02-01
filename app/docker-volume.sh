@@ -7,12 +7,7 @@ VOLUME=$2
 FILENAME=$3
 
 
-function disableShop(){
-  UPDATE ps_configuration SET value=0 WHERE `name` = "PS_SHOP_ENABLE"
-}
-function enableShop(){
-  UPDATE ps_configuration SET value=1 WHERE `name` = "PS_SHOP_ENABLE"
-}
+
 
 function retoreVolume(){
   #docker run --rm -v $VOLUME:/app -v $PWD/backup:/backup ubuntu bash -c "ls -latr /"
