@@ -64,7 +64,7 @@ fi
 
 
 if [ "$1" = "show" ];then
-  docker exec $CONTAINER sh -c "ls -latr /app && ls -latr /app/web" 
+  docker exec $WEBCONTAINER sh -c "ls -latr /app && ls -latr /app/web" 
   exit 0
 fi
 
