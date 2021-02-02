@@ -10,6 +10,7 @@ services:
         environment:
             - "VIRTUAL_HOST=my.domain.ext"
             - "APACHE_DOCUMENTROOT=/app/web"
+            - "SYMFONY_DEBUG=1"
         links:
             - php
         depends_on:
