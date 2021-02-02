@@ -96,5 +96,11 @@ if [ "$1" = "show" ];then
   exit 0
 fi
 
+echo "Usage:"
+echo " install - installs prestashop in /app/web"
+echo " fixowner - set www-data as owner. "
+echo " fixpermissions - fixes permissions. "
+echo " show - shows contents of /app and /app/web "
+
 
 
