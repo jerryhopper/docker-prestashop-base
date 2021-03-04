@@ -1,88 +1,99 @@
-version: '3'
+version: '3.6'
 services:
-    web:
-        #
-        # Apache webserver prepared for php-fpm
-        #
-        image: jerryhopper/apache2-fpm:latest
-        container_name: prestashop_web
-        restart: always
-        environment:
-            - "VIRTUAL_HOST=my.domain.ext"
-            - "APACHE_DOCUMENTROOT=/app/web"
-            - "SYMFONY_DEBUG=1"
-        links:
-            - php
-        depends_on:
-            - php
-        volumes:
-            - prestashop-data:/app:cached
-        ports:
-            - 8089:80
     database:
         #
         # MariaDB database
         #
-        container_name: prestashop_database
+        # ${PWD##*/}
+        #
+        container_name: ${STACKNAME}_database
         image: mariadb:latest
         restart: always
         environment:
             - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         volumes:
-            - prestashop-database:/var/lib/mysql
-    php:
-        #
-        # php-fpm binary
-        #
-        image: jerryhopper/phpfpm:latest-dev
-        container_name: prestashop_php
-        restart: always
-        depends_on:
-            - redis
-        # Scheduler!
-        labels:
-            ofelia.enabled: "true"
-            # every day at 01:00
-            ofelia.job-exec.datecron.schedule: "0 0 1 * * *"
-            ofelia.job-exec.datecron.command: "uname -a"
-        volumes:
-            - prestashop-data:/app:cached
-        environment:
-            - "PHP_SESSION_SAVE_HANDLER=redis"
-            - "PHP_SESSION_SAVE_PATH=tcp://redis:6379"
-            - "PHP_MAX_EXECUTION_TIME=120"
-            - "PHP_OPCACHE_LIMIT=64M"
-            - "PHP_OPCACHE_REVALIDATE=2"
-            - "PHP_SMTP_HOST=localhost"
-        links:
-            - redis
-            - database
-        depends_on:
-            - database
-    redis:
-        # 
-        # Redis for session storage
-        #
-        image: redis:4-alpine
-        container_name: prestashop_redis
-        restart: always
-        depends_on: 
-            - memcached
+            - databasedata:/var/lib/mysql
+            - $PWD:/backup
+        networks:
+          - internal
     memcached:
         #
         # Memchache server 
         #
         image: memcached:latest
-        container_name: prestashop_memcached
+        container_name: ${STACKNAME}_memcached
         restart: always
+        depends_on:
+          - database
+        networks:
+          - internal
+    web:
+        #
+        # Apache webserver prepared for php-fpm
+        #
+        image: prestashop/prestashop:1.7-7.2-apache
+        container_name: ${STACKNAME}_web
+        restart: always
+        environment:
+            - "DB_SERVER=${DB_SERVER:-database}"
+            - "DB_USER=${DB_USER}"
+            - "DB_PASSWD=${DB_PASSWORD}"
+            - "DB_PREFIX=${DB_PREFIX:-ps_}"
+            - "DB_NAME=${DB_NAME:-prestashop}"
+            - "PS_DEV_MODE=${PS_DEV_MODE:-0}"
+            - "PS_HOST_MODE=${PS_HOST_MODE:-0}"
+            - "PS_DEMO_MODE=${PS_DEMO_MODE:-0}"
+            - "PS_INSTALL_AUTO=${PS_INSTALL_AUTO:-0}"
+            - "PS_ERASE_DB=${PS_DB_ERASE:-0}"
+            - "PS_INSTALL_DB=${PS_INSTALL_DB:-0}"
+            - "PS_LANGUAGE=${SHOP_LANGUAGE:-nl}"
+            - "PS_COUNTRY=${SHOP_COUNTRY:-nl}"
+            - "PS_ALL_LANGUAGES=${PS_ALL_LANGUAGES:-0}"
+            - "PS_FOLDER_ADMIN=admin"
+            - "PS_FOLDER_INSTALL=install"
+            - "PS_ENABLE_SSL=${PS_ENABLE_SSL}"
+            - "ADMIN_MAIL=${ADMIN_MAIL}"
+            - "ADMIN_PASSWD=${ADMIN_PASSWD}"
+            - "PS_HANDLE_DYNAMIC_DOMAIN=${PS_HANDLE_DYNAMIC_DOMAIN}"
+        labels:
+             - traefik.enable=${TRAEFIK_ENABLE}
+             - traefik.http.routers.${STACKNAME}_webu.rule=Host(`${PS_HANDLE_DYNAMIC_DOMAIN}`)             
+             - traefik.http.routers.${STACKNAME}_webu.entrypoints=http
+             - traefik.http.routers.${STACKNAME}_webu.middlewares=${STACKNAME}-redirectscheme
+             - traefik.http.middlewares.${STACKNAME}-redirectscheme.redirectscheme.scheme=https
+             - traefik.http.middlewares.${STACKNAME}-redirectscheme.redirectscheme.permanent=true
+             - traefik.http.routers.${STACKNAME}_web.entrypoints=https
+             - traefik.http.routers.${STACKNAME}_web.rule=Host(`${PS_HANDLE_DYNAMIC_DOMAIN}`)
+             - traefik.http.routers.${STACKNAME}_web.service=${STACKNAME}_web@docker
+             - traefik.http.services.${STACKNAME}_web.loadbalancer.server.port=80
+             - traefik.docker.network=proxy
+             - traefik.http.routers.${STACKNAME}_web.tls=true
+             - traefik.http.routers.${STACKNAME}_web.tls.certresolver=http
+             - traefik.http.routers.${STACKNAME}_web.tls.domains[0].main=${PS_HANDLE_DYNAMIC_DOMAIN}
+             - traefik.http.routers.${STACKNAME}_web.tls.options=default
+        links:
+          - database:database
+        depends_on:
+          - database
+          - memcached
+        volumes:
+            - filesystemdata:/var/www/html
+            - $PWD:/backup
+        #ports:
+        #  - 8089:80
+        networks:
+          - proxy
+          - internal
     scheduler:
         #
         # https://github.com/mcuadros/ofelia
         #
         image: mcuadros/ofelia:latest
-        container_name: prestashop_scheduler
+        container_name: ${STACKNAME}_scheduler
+        networks:
+          - internal
         depends_on:
-            - php
+            - web
         command: daemon --docker
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -90,6 +101,15 @@ services:
         #    ofelia.job-local.my-test-job.schedule: "@every 65s"
         #    ofelia.job-local.my-test-job.command: "date"    
 volumes:
-  prestashop-data:
-  prestashop-database:
+  filesystemdata:
+     name: ${STACKNAME}_data
+  databasedata:
+     name: ${STACKNAME}_database
+networks:
+  proxy:
+    external: true
+  internal:
+    name: ${STACKNAME}_network
+      
+
 
